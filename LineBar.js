@@ -5,6 +5,7 @@ export default class LineBar extends React.Component {
   constructor(props) {
     super(props)
     this.state = { touched: false }
+    this.windowWidth = Dimensions.get('window').width
   }
   render() {
     return (
@@ -17,16 +18,21 @@ export default class LineBar extends React.Component {
         }}>
         <View
           style={{
-            height: this.props.height * 10,
+            height:
+              (this.props.height / this.props.max) *
+              Dimensions.get('window').height *
+              0.4,
             backgroundColor:
               'active' in this.props && this.props.active
-                ? '#daffe0'
-                : '#1783c1',
-            marginLeft: Dimensions.get('window').width * 0.04,
-            width: Dimensions.get('window').width * 0.02,
-            marginRight: Dimensions.get('window').width * 0.04,
+                ? 'rgba(255, 255, 255, 0.6)'
+                : 'rgba(255, 255, 255, 0.2)',
+            marginLeft:
+              this.windowWidth *
+              ('first' in this.props && this.props.first ? 0.14 : 0.04),
+            width: this.windowWidth * 0.02,
+            marginRight: this.windowWidth * 0.04,
             alignSelf: 'flex-end',
-            borderRadius: Dimensions.get('window').width / 0.01,
+            borderRadius: this.windowWidth / 0.01,
           }}>
           {this.state.touched || ('active' in this.props && this.props.active)
             ? [
@@ -34,8 +40,8 @@ export default class LineBar extends React.Component {
                   style={{
                     position: 'absolute',
                     top: -20,
-                    width: Dimensions.get('window').width * 0.06,
-                    left: -Dimensions.get('window').width * 0.02,
+                    width: this.windowWidth * 0.06,
+                    left: -this.windowWidth * 0.02,
                     textAlign: 'center',
                     color: 'white',
                   }}
@@ -47,13 +53,13 @@ export default class LineBar extends React.Component {
                   style={{
                     position: 'absolute',
                     bottom: -20,
-                    width: Dimensions.get('window').width * 0.14,
-                    left: -Dimensions.get('window').width * 0.06,
+                    width: this.windowWidth * 0.14,
+                    left: -this.windowWidth * 0.06,
                     textAlign: 'center',
                     color: 'white',
                   }}
                   key={'time' + this.props.height}>
-                  {this.props.time}
+                  {new Date(this.props.time).getHours() + ':00'}
                 </Text>,
               ]
             : null}
